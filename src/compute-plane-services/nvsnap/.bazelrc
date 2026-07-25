@@ -42,21 +42,20 @@ build:release --stamp
 #    a second pipeline on the same runner skips work the first one
 #    already did. Devs benefit too; the path is gitignored.
 #
-# 2. Remote cache (opt-in via --config=remote). Points at nvcfbarn,
-#    the team Buildbarn at NVIDIA. Default is OFF in this repo
-#    because the nvsnap project has no probe wired yet -- enabling
-#    --config=remote on a runner that cannot reach nvcfbarn fails
-#    the build hard (Bazel's initial GetCapabilities RPC is not
-#    covered by --remote_local_fallback). CI sets
+# 2. Remote cache (opt-in via --config=remote). The caller supplies the
+#    endpoint with --remote_cache; this file carries only the policy and
+#    tuning flags. Default is OFF in this repo because the nvsnap project
+#    has no probe wired yet -- enabling --config=remote on a runner that
+#    cannot reach the cache fails the build hard (Bazel's initial
+#    GetCapabilities RPC is not covered by --remote_local_fallback). CI sets
 #    --config=remote-write explicitly in .gitlab-ci.yml; devs and
 #    ad-hoc builds stay on disk-only.
 build --disk_cache=.bazel-cache/disk
 build --repository_cache=.bazel-cache/repo
 
-# Read-only remote cache profile. Pulls hits from nvcfbarn but does
-# not upload. Layer on top of this with --config=remote-write to
+# Read-only remote cache profile. Pulls hits but does not upload. Supply
+# the endpoint with --remote_cache; layer --config=remote-write on top to
 # also write back results.
-build:remote --remote_cache=grpc://nvcfbarn.nvidia.com:8980
 build:remote --remote_upload_local_results=false
 build:remote --remote_cache_compression
 build:remote --remote_local_fallback

@@ -76,7 +76,7 @@ Cache contract: Bazel rebuilds the genrule when any input
 `local = True` + `tags = ["no-sandbox"]` so it can resolve `go` from
 `$PATH` and write to the standard Go module cache. The wrapper
 binary, in contrast, is a regular `go_binary` and benefits from full
-Bazel hermeticity + nvcfbarn remote-cache reuse.
+Bazel hermeticity + remote-cache reuse.
 
 A containerized Go application that provides a complete observability solution by orchestrating three functional components: it generates OpenTelemetry Collector configurations, extracts and manages secrets from ESS (Encrypted Secret Store), and runs a custom-built OpenTelemetry Collector binary.
 
